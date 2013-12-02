@@ -70,10 +70,18 @@
 {#- RSS link -#}
 {%- macro rss_link() -%}
     <div class="rss">
+      {%- if use_atom_feed -%}
+        <a href="{{ website }}atom" title="Subscribe via Atom">
+            {%- if rss_symbol -%}<span class="webfont">B</span>{%- endif -%}
+            {% if rss_link_text -%}{{ rss_link_text }}{% endif -%}
+        </a>
+
+      {%- else -%}
         <a href="{{ rss_feed_link }}" title="Subscribe via RSS">
             {%- if rss_symbol -%}<span class="webfont">B</span>{%- endif -%}
             {% if rss_link_text -%}{{ rss_link_text }}{% endif -%}
         </a>
+      {%- endif -%}
     </div>
 {%- endmacro -%}
 
@@ -232,7 +240,11 @@
         {%- if prev -%}
         <link rel="prev" title="{{ prev.title|striptags|e }}" href="{{ prev.link|e }}" />
         {%- endif -%}
+        {%- if use_atom_feed -%}
+        <link rel="alternate" type="application/atom+xml" title="Atom" href="{{ website }}atom" />
+        {%- else -%}
         <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ rss_feed_link }}" />
+        {%- endif -%}
       {%- endblock -%}
 
       {%- if not embedded -%}
@@ -303,7 +315,11 @@
       {%- block footer -%}
           <footer class="wrapper">
           {%- if show_copyright -%}
+          {% if rights %}
+            {{ rights|e }}.
+          {% else %}
             {% trans copyright=copyright|e -%}&copy; Copyright {{ copyright }}. {% endtrans -%}
+          {% endif %}
           {%- endif -%}
           {%- if show_sphinx -%}
             Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.

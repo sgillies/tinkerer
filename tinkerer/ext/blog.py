@@ -76,6 +76,7 @@ def html_page_context(app, pagename, templatename, context, doctree):
     '''
     metadata.add_metadata(app, pagename, context)
     rss.add_rss(app, context)
+    atom.add_atom(app, context)
 
 
 
@@ -135,7 +136,10 @@ def setup(app):
     app.add_config_value("rss_generate_full_posts", False, True)
     app.add_config_value("website", "http://127.0.0.1/blog/html/", True)
     app.add_config_value("posts_per_page", 10, True)
-    app.add_config_value("blog_date", "2013", True)
+    app.add_config_value('blog_date', "2013", True)
+    app.add_config_value("rights", "", True)
+    app.add_config_value("use_atom_feed", False, True)
+
     # new directives
     app.add_directive("author", author.AuthorDirective)
     app.add_directive("comments", metadata.CommentsDirective)

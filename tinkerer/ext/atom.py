@@ -49,6 +49,14 @@ class SummaryDirective(Directive):
 
         return []
 
+def add_atom(app, context):
+    '''
+    Adds RSS service link to page context.
+    '''
+    context["rights"] = app.config.rights
+    context["use_atom_feed"] = app.config.use_atom_feed
+
+
 def generate_feed(app):
     '''
     Generates Atom feed.
@@ -103,7 +111,7 @@ def generate_feed(app):
   
     # feed pubDate is equal to latest post pubDate
     context["updated"] = context["entries"][0]["published"]
-
+    
     yield ("atom", context, "atom.xml")
 
 
