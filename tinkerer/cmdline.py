@@ -51,6 +51,7 @@ def build():
     # silence Sphinx if in quiet mode
     if output.quiet:
         flags.append("-q")
+
     flags += ["-d", paths.doctree, "-b", "html", paths.root, paths.html]
 
     # build always prints "index.html"

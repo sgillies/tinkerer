@@ -8,8 +8,8 @@
     CONTRIBUTORS file)
     :license: FreeBSD, see LICENSE file
 '''
-from tinkerer.ext import aggregator, author, filing, html5, metadata, patch, \
-                         readmore, rss, uistr
+from tinkerer.ext import aggregator, atom, author, filing, html5, metadata, \
+                         patch, readmore, rss, uistr
 import gettext
 
 
@@ -86,6 +86,9 @@ def collect_additional_pages(app):
     for name, context, template in rss.generate_feed(app):
         yield (name, context, template)
 
+    for name, context, template in atom.generate_feed(app):
+        yield (name, context, template)
+
     for name, context, template in filing.make_tag_pages(app):
         yield (name, context, template)
 
@@ -132,7 +135,7 @@ def setup(app):
     app.add_config_value("rss_generate_full_posts", False, True)
     app.add_config_value("website", "http://127.0.0.1/blog/html/", True)
     app.add_config_value("posts_per_page", 10, True)
-
+    app.add_config_value("blog_date", "2013", True)
     # new directives
     app.add_directive("author", author.AuthorDirective)
     app.add_directive("comments", metadata.CommentsDirective)
@@ -141,6 +144,7 @@ def setup(app):
     app.add_directive("categories", 
             filing.create_filing_directive("categories"))
     app.add_directive("more", readmore.InsertReadMoreLink)
+    app.add_directive("summary", atom.SummaryDirective)
  
     # create a new Sphinx event which gets called when we generate aggregated
     # pages
